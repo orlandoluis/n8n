@@ -1397,6 +1397,9 @@ importers:
 
   packages/@n8n/client-oauth2:
     dependencies:
+      '@n8n/utils':
+        specifier: workspace:*
+        version: link:../utils
       axios:
         specifier: 1.18.0
         version: 1.18.0(debug@4.4.3)
@@ -5024,6 +5027,9 @@ importers:
       '@n8n/imap':
         specifier: workspace:*
         version: link:../@n8n/imap
+      '@n8n/utils':
+        specifier: workspace:*
+        version: link:../@n8n/utils
       '@thednp/dommatrix':
         specifier: ^2.0.12
         version: 2.0.12

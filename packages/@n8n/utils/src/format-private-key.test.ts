@@ -1,4 +1,6 @@
-import { formatPrivateKey } from '@/format-private-key';
+import { describe, expect, it } from 'vitest';
+
+import { formatPrivateKey } from './format-private-key';
 
 describe('formatPrivateKey', () => {
 	it('should format compact private PEM blocks with wrapped body lines', () => {
@@ -40,6 +42,15 @@ ${'C'.repeat(64)}
 -----END RSA PRIVATE KEY-----`);
 	});
 
+	it('should format compact EC PRIVATE KEY block', () => {
+		const compactKey = `-----BEGIN EC PRIVATE KEY-----${'D'.repeat(70)}-----END EC PRIVATE KEY-----`;
+
+		expect(formatPrivateKey(compactKey)).toBe(`-----BEGIN EC PRIVATE KEY-----
+${'D'.repeat(64)}
+${'D'.repeat(6)}
+-----END EC PRIVATE KEY-----`);
+	});
+
 	it('should format compact CERTIFICATE block (not just private keys)', () => {
 		const compactCert = `-----BEGIN CERTIFICATE-----${'E'.repeat(128)}-----END CERTIFICATE-----`;
 
@@ -72,10 +83,32 @@ ${'F'.repeat(32)}
 		expect(formatPrivateKey(chain)).toBe(chain);
 	});
 
+	it('should preserve multi-line certificate chain unchanged', () => {
+		const chain = `-----BEGIN CERTIFICATE-----
+AAA
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+BBB
+-----END CERTIFICATE-----`;
+
+		expect(formatPrivateKey(chain)).toBe(chain);
+	});
+
 	it('should not match when BEGIN/END labels differ', () => {
 		const mismatched = `-----BEGIN RSA PRIVATE KEY-----${'A'.repeat(64)}-----END EC PRIVATE KEY-----`;
 
 		expect(formatPrivateKey(mismatched)).toBe(mismatched);
+	});
+
+	it('should keep a multiline encrypted PEM with Proc-Type/DEK-Info unchanged', () => {
+		const encrypted = `-----BEGIN RSA PRIVATE KEY-----
+Proc-Type: 4,ENCRYPTED
+DEK-Info: AES-256-CBC,1234567890ABCDEF
+
+${'X'.repeat(64)}
+-----END RSA PRIVATE KEY-----`;
+
+		expect(formatPrivateKey(encrypted)).toBe(encrypted);
 	});
 
 	it('should collapse Proc-Type/DEK-Info headers on the fallback path', () => {

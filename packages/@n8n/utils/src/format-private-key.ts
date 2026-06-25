@@ -1,8 +1,3 @@
-// NOTE: Copied verbatim from `n8n-nodes-base` (utils/utilities.ts). It can't be
-// imported from there because nodes-base already depends on this package, so a
-// reverse dependency would be a cycle. De-duplicating both copies into a shared
-// low-level package is tracked in ENT-114.
-
 const PEM_BODY_LINE_LENGTH = 64;
 
 function formatCompactPem(privateKey: string, keyIsPublic: boolean): string | undefined {

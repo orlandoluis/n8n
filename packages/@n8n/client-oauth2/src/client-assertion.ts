@@ -1,6 +1,5 @@
+import { formatPrivateKey } from '@n8n/utils';
 import { createSign, randomUUID, X509Certificate } from 'node:crypto';
-
-import { formatPrivateKey } from './format-private-key';
 
 // private_key_jwt (RFC 7521/7523): the client proves its identity with a JWT
 // signed by its private key instead of a shared secret. The `x5t` header (SHA-1
@@ -14,8 +13,7 @@ function base64url(input: Buffer | string): string {
 }
 
 function certificateThumbprint(certificate: string): string {
-	// `formatPrivateKey` also normalizes CERTIFICATE PEMs; the name-vs-usage
-	// mismatch is resolved by the shared-helper rename tracked in ENT-114.
+	// `formatPrivateKey` also normalizes CERTIFICATE PEMs despite the name.
 	const fingerprint = new X509Certificate(formatPrivateKey(certificate)).fingerprint;
 	return Buffer.from(fingerprint.replace(/:/g, ''), 'hex').toString('base64url');
 }

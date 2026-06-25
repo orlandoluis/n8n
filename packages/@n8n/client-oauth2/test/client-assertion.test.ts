@@ -1,7 +1,7 @@
+import { formatPrivateKey } from '@n8n/utils';
 import { createVerify, X509Certificate } from 'node:crypto';
 
 import { buildClientAssertion } from '@/client-assertion';
-import { formatPrivateKey } from '@/format-private-key';
 
 import * as config from './config';
 
