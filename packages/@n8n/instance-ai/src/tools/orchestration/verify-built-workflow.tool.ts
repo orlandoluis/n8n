@@ -7,7 +7,8 @@
  */
 
 import { Tool } from '@n8n/agents';
-import { isPlaceholderValue, isRecord } from '@n8n/utils';
+import { isPlaceholderValue } from '@n8n/utils/placeholder';
+import { isRecord } from '@n8n/utils/is-record';
 import { z } from 'zod';
 
 import type { OrchestrationContext } from '../../types';
